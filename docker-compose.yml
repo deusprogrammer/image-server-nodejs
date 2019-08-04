@@ -1,0 +1,19 @@
+version: '2'
+services:
+  image-db:
+    image: mongo:latest
+    environment:
+      - MONGO_DATA_DIR=/data/db
+      - MONGO_LOG_DIR=/dev/null
+      - MONGO_INITDB_DATABASE=image-db
+    volumes:
+      - ~/data/db/image-db:/data/db
+    ports:
+      - 27017:27017
+    command: mongod --smallfiles --logpath=/dev/null # --quiet
+  image-svc:
+    build: ./
+    environment:
+      - IMAGE_DB_URL=mongodb://image-db/image-db?retryWrites=true
+    ports: 
+      - 8080:3000

@@ -10,10 +10,12 @@ services:
       - ~/data/db/image-db:/data/db
     ports:
       - 27017:27017
-    command: mongod --smallfiles --logpath=/dev/null # --quiet
+    command: mongod --logpath=/dev/null # --quiet
   image-svc:
     build: ./
     environment:
       - IMAGE_DB_URL=mongodb://image-db/image-db?retryWrites=true
+    volumes:
+      - ~/data/images:/var/image-server/data
     ports: 
       - 8080:3000

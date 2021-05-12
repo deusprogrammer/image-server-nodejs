@@ -33,7 +33,8 @@ router.route("/")
 				}
 
 				return response.json(result);
-			})
+			});
+			return;
 		}
 
 		Images.find({}, (err, result) => {
@@ -41,7 +42,7 @@ router.route("/")
 				return response.send(err)
 			}
 
-			return response.json(result)
+			return response.json(result);
 		})
 	})
 

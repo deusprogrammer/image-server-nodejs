@@ -8,7 +8,7 @@ var app = express()
 
 app.use(logger('dev'))
 app.use(cors())
-app.use(express.json({limit: "10Mb"}))
+app.use(express.json({limit: "500Mb"}))
 app.use(express.urlencoded({ extended: false }))
 
 // Mongoose instance connection url connection

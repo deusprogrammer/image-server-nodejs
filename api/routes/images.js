@@ -46,6 +46,25 @@ router.route("/")
 		})
 	})
 
+router.route("/:id/file")
+	.get((request, response) => {
+		Images.findById(request.params.id, (err, result) => {
+			if (err) {
+				response.send(err)
+				return
+			}
+
+			if (!result) {
+				response.status(404)
+				return
+			}
+
+			response.setHeader("content-type", result.mimeType)
+			response.sendFile(result.filePath)
+			return
+		})
+	})
+
 router.route("/:id")
 	.get((request, response) => {
 		Images.findById(request.params.id, (err, result) => {

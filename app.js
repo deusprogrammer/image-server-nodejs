@@ -26,6 +26,10 @@ var connectWithRetry = function() {
 };
 connectWithRetry();
 
-app.use('/images', imageRouter)
+// Used for legacy
+app.use('/images', imageRouter);
+
+// New endpoint
+app.use('/media', imageRouter);
 
 module.exports = app

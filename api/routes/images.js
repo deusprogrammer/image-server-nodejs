@@ -26,13 +26,22 @@ router.route("/")
 		})
 	})
 	.get((request, response) => {
+		if (request.query.extension) {
+			Images.find({mimeType: request.query.extension}, (err, result) => {
+				if (err) {
+					return response.send(err);
+				}
+
+				return response.json(result);
+			})
+		}
+
 		Images.find({}, (err, result) => {
 			if (err) {
-				response.send(err)
-				return
+				return response.send(err)
 			}
 
-			response.json(result)
+			return response.json(result)
 		})
 	})
 
@@ -49,7 +58,7 @@ router.route("/:id")
 				return
 			}
 
-			if (request.header("accept").startsWith("image/")) {
+			if (request.header("accept").startsWith("image/") || request.header("accept").startsWith("video/") || request.header("accept").startsWith("audio/")) {
 				response.setHeader("content-type", result.mimeType)
 				response.sendFile(result.filePath)
 			} else {

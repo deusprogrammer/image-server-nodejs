@@ -1,7 +1,7 @@
 const jwtStrategy = require('passport-jwt/lib/strategy')
 const extractJwt = require('passport-jwt/lib/extract_jwt')
 
-import authConfig from './authConfig'
+const authConfig = require('./authConfig')
 
 export let jwtAuthStrategy = new jwtStrategy({
     secretOrKey: authConfig.key,

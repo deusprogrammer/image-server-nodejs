@@ -3,7 +3,7 @@ const extractJwt = require('passport-jwt/lib/extract_jwt')
 
 const authConfig = require('./authConfig')
 
-export let jwtAuthStrategy = new jwtStrategy({
+exports.jwtAuthStrategy = new jwtStrategy({
     secretOrKey: authConfig.key,
     jwtFromRequest: extractJwt.fromAuthHeaderAsBearerToken()
 }, async (token, done) => {

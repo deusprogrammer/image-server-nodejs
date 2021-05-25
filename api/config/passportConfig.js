@@ -1,5 +1,5 @@
-import jwtStrategy from 'passport-jwt/lib/strategy'
-import extractJwt from 'passport-jwt/lib/extract_jwt'
+const jwtStrategy = require('passport-jwt/lib/strategy')
+const extractJwt = require('passport-jwt/lib/extract_jwt')
 
 import authConfig from './authConfig'
 

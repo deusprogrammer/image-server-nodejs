@@ -1,24 +1,27 @@
 var Images = require('../models/image')
 var express = require('express')
 var fs = require('fs')
+const { authenticatedUserHasRole } = require('../utils/SecurityHelper')
 var router = express.Router()
 
 router.route("/")
 	.post((request, response) => {
-		var buffer = new Buffer(request.body.imagePayload, "base64")
-		var extension = request.body.mimeType.substring(request.body.mimeType.indexOf("/") + 1)
-		var fileName = `/var/image-server/data/${Date.now()}.${extension}`
+		if (!authenticatedUserHasRole(request, "MEDIA_UPLOADER")) {
+			response.status(401);
+			return response.send();
+		}
+		let buffer = new Buffer(request.body.imagePayload, "base64")
+		let extension = request.body.mimeType.substring(request.body.mimeType.indexOf("/") + 1)
+		let fileName = `/var/image-server/data/${Date.now()}.${extension}`
 		fs.writeFile(fileName, buffer, (fileError) => {
 			if (fileError) {
-				response.send(fileError)
-				return
+				return response.send(fileError);
 			}
 
 			request.body.filePath = fileName
 			Images.create(request.body, (err, result) => {
 				if (err) {
-					response.send(err)
-					return
+					return response.send(err);
 				}
 	
 				response.json(result)

@@ -1,15 +1,21 @@
-var express = require('express')
-var logger = require('morgan')
-var mongoose = require('mongoose')
-var cors = require('cors')
+const express = require('express')
+const logger = require('morgan')
+const mongoose = require('mongoose')
+const cors = require('cors')
 
-var imageRouter = require('./api/routes/images')
-var app = express()
+const passport = require('passport')
+const {jwtAuthStrategy} = require('./api/config/passportConfig')
+
+const imageRouter = require('./api/routes/images')
+const app = express()
+
+passport.use(jwtAuthStrategy);
 
 app.use(logger('dev'))
 app.use(cors())
 app.use(express.json({limit: "500Mb"}))
 app.use(express.urlencoded({ extended: false }))
+app.use(passport.initialize());
 
 // Mongoose instance connection url connection
 var databaseUrl = process.env.IMAGE_DB_URL
@@ -27,9 +33,9 @@ var connectWithRetry = function() {
 connectWithRetry();
 
 // Used for legacy
-app.use('/images', imageRouter);
+app.use('/images', passport.authenticate("jwt", { session: false }), imageRouter);
 
 // New endpoint
-app.use('/media', imageRouter);
+app.use('/media', passport.authenticate("jwt", { session: false }), imageRouter);
 
 module.exports = app

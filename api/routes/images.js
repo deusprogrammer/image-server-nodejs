@@ -68,6 +68,29 @@ router.route("/:id/file")
 		})
 	})
 
+router.route("/:id/file.mp3")
+	.get((request, response) => {
+		Images.findById(request.params.id, (err, result) => {
+			if (err) {
+				response.send(err)
+				return
+			}
+
+			if (!result) {
+				response.status(404)
+				return
+			}
+
+			if (result.mimeType !== "audio/mp3") {
+				response.status(404).send();
+			}
+
+			response.setHeader("content-type", result.mimeType)
+			response.sendFile(result.filePath)
+			return
+		})
+	})
+
 router.route("/:id")
 	.get((request, response) => {
 		Images.findById(request.params.id, (err, result) => {

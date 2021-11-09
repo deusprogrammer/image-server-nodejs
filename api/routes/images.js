@@ -82,7 +82,7 @@ router.route("/:id/file.mp3")
 			}
 
 			if (result.mimeType !== "audio/mp3") {
-				response.status(404).send();
+				return response.status(404).send();
 			}
 
 			response.setHeader("content-type", result.mimeType)

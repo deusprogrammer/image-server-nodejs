@@ -68,8 +68,9 @@ router.route("/:id/file")
 		})
 	})
 
-router.route("/:id/file.mp3")
+router.route("/:id/file.:ext")
 	.get((request, response) => {
+		console.log("EXTENSION: " + request.params.ext)
 		Images.findById(request.params.id, (err, result) => {
 			if (err) {
 				response.send(err)
@@ -81,11 +82,7 @@ router.route("/:id/file.mp3")
 				return
 			}
 
-			if (result.mimeType !== "audio/mp3") {
-				return response.status(404).send();
-			}
-
-			response.setHeader("content-type", result.mimeType)
+			response.setHeader("content-type", "application/octet-stream")
 			response.sendFile(result.filePath)
 			return
 		})
